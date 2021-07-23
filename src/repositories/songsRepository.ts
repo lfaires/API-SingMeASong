@@ -60,7 +60,7 @@ export async function getTopByAmount(amount: string) {
 export async function getHighScore() {
 
     const result = await connection.query(`
-        SELECT * FROM songs WHERE score > 10`)
+        SELECT * FROM songs WHERE score > 10 ORDER BY score DESC`)
     
         return result.rows.length === 0 ? false : result.rows;
 }
@@ -68,7 +68,7 @@ export async function getHighScore() {
 export async function getLowScore() {
 
     const result = await connection.query(`
-        SELECT * FROM songs WHERE score <= 10`)
+        SELECT * FROM songs WHERE score <= 10 ORDER BY score DESC`)
     
         return result.rows.length === 0 ? false : result.rows;
 }
@@ -76,7 +76,7 @@ export async function getLowScore() {
 export async function getAny() {
 
     const result = await connection.query(`
-        SELECT * FROM songs`)
+        SELECT * FROM songs ORDER BY score DESC`)
         
         return result.rows.length === 0 ? false : result.rows;
 }
