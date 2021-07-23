@@ -12,14 +12,27 @@ export async function checkForDuplicated(name: string, link: string){
     return song;
 }
 
-export async function checkAndUpdate(id: string){
-    const song = await songsRepository.findById(id);
+export async function updateScoreUp(id: string){
+    const checkIfExists= await songsRepository.findById(id);
    
-    if (!song) {
+    if (!checkIfExists) {
         return false;
     }
     
-    const updated = await songsRepository.updateScore(id); 
+    const update = await songsRepository.scoreUp(id); 
     
-    return updated;
+    return update;
+}
+
+export async function updateScoreDown(id: string){
+    const checkIfExists = await songsRepository.findById(id);
+   
+    if (!checkIfExists) {
+        return false;
+    }
+    
+    const update = await songsRepository.scoreDown(id); 
+    await songsRepository.deleteRecommended(id);
+
+    return update;
 }

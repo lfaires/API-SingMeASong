@@ -25,10 +25,26 @@ export async function findById(id: string) {
     return result.rows[0];
 }
 
-export async function updateScore(id: string) {
+export async function scoreUp(id: string) {
     
     const result = await connection.query(`
         UPDATE songs SET score = score + 1 WHERE id = $1 RETURNING *`,[id])
         
     return result.rows[0];
+}
+
+export async function scoreDown(id: string) {
+    
+    const result = await connection.query(`
+        UPDATE songs SET score = score - 1 WHERE id = $1 RETURNING *`,[id]);
+        
+    return result.rows[0];
+}
+
+export async function deleteRecommended(id: string) {
+    
+    const score: number = -5;
+    const result = await connection.query(`
+        DELETE FROM songs WHERE score < $1`,[score]);
+
 }
