@@ -1,4 +1,5 @@
 
+import '../../src/setup'
 import supertest from "supertest";
 
 import app from "../../src/app";
@@ -53,7 +54,30 @@ describe('POST /recommendations', () =>{
 
 describe('POST /recommendations/:id/upvote', () =>{
   it('should answer status 200 for score updated', async () => {
-    //
+    const song = await createSong();
+    await supertest(app).post('/recommendations').send(song);
+
+    const response = await supertest(app).post('/recommendations/1/upvote').send(song);
+
+    expect(response.status).toEqual(200);
+  })
+
+  it('should answer status 404 for valid id that does not exist', async () => {
+    const song = await createSong();
+    await supertest(app).post('/recommendations').send(song);
+
+    const response = await supertest(app).post('/recommendations/3/upvote').send(song);
+
+    expect(response.status).toEqual(404);
+  })
+
+  it('should answer status 400 for invalid id', async () => {
+    const song = await createSong();
+    await supertest(app).post('/recommendations').send(song);
+
+    const response = await supertest(app).post('/recommendations/ronald/upvote').send(song);
+
+    expect(response.status).toEqual(400);
   })
 
 })
