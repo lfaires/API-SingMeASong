@@ -113,3 +113,48 @@ describe('POST /recommendations/:id/downvote', () =>{
   })
 
 })
+
+describe('GET /recommendations/top/:amount', () =>{
+  it('should answer status 200 and top songs list', async () => {
+    let song = {}
+    for (let i=0; i<3;i++){
+      song = await createSong()
+      await agent.post('/recommendations').send(song);
+    }
+
+    await agent.post('/recommendations/1/downvote');
+    await agent.post('/recommendations/1/downvote');
+    await agent.post('/recommendations/3/upvote');
+
+    const response = await agent.get('/recommendations/top/3');
+    
+    expect(response.body[0].score).toEqual(1)
+    expect(response.body[1].score).toEqual(0)
+    expect(response.body[2].score).toEqual(-2)
+    expect(response.body.length).toEqual(3)
+    expect(response.status).toEqual(200);
+  })
+
+  it('should answer status 404 for empty songs list', async () => {
+    const response = await agent.get('/recommendations/top/3');
+
+    expect(response.status).toEqual(404);
+  })
+
+  it('should answer status 400 for invalid amount', async () => {
+    let song = {}
+    for (let i=0; i<3;i++){
+      song = await createSong()
+      await agent.post('/recommendations').send(song);
+    }
+
+    await agent.post('/recommendations/1/downvote');
+    await agent.post('/recommendations/1/downvote');
+    await agent.post('/recommendations/3/upvote');
+
+    const response = await agent.get('/recommendations/top/ronald');
+
+    expect(response.status).toEqual(400);
+  })
+
+})

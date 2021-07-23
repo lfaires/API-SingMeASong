@@ -48,3 +48,11 @@ export async function deleteRecommended(id: string) {
         DELETE FROM songs WHERE score < $1`,[score]);
 
 }
+
+export async function getTopByAmount(amount: string) {
+
+    const result = await connection.query(`
+        SELECT * FROM songs ORDER BY score DESC LIMIT $1`,[amount])
+    
+        return result.rows.length === 0 ? false : result.rows;
+}

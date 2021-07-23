@@ -8,8 +8,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.post('/recommendations', songsController.recommend)
-app.post('/recommendations/:id/upvote', songsController.scoreUp)
-app.post('/recommendations/:id/downvote', songsController.scoreDown)
+app.post('/recommendations', songsController.recommend);
+app.post('/recommendations/:id/upvote', songsController.scoreUp);
+app.post('/recommendations/:id/downvote', songsController.scoreDown);
+app.get('/recommendations/top/:amount', songsController.getTop);
 
 export default app;
