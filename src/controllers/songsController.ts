@@ -63,7 +63,7 @@ export async function scoreDown(req: Request,res: Response){
     }
 }
 
-export async function getTop(req: Request,res: Response){
+export async function getMostRecommended(req: Request,res: Response){
     try{
         const { amount } = req.params
         
@@ -77,6 +77,22 @@ export async function getTop(req: Request,res: Response){
         } else {
             res.sendStatus(404);
         }
+    } catch (error){
+        console.log(error);
+        res.sendStatus(500);
+    }
+}
+
+export async function getRandom(req: Request,res: Response){
+    try{
+        const song = await songsService.getSong()
+
+        if (song) {
+            res.send(song);
+        } else {
+            res.sendStatus(404);
+        }
+
     } catch (error){
         console.log(error);
         res.sendStatus(500);
